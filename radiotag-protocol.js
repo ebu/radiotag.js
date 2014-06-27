@@ -43,7 +43,6 @@ var req = {
       data: uriEncodedBody,
       beforeSend: function (xhr) {
         if (accessToken) {
-          Logger.info('Authorization: Bearer ' + accessToken);
           xhr.setRequestHeader("Authorization", "Bearer " + accessToken);
         }
       }
