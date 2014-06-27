@@ -1,0 +1,28 @@
+{
+  "name": "radiotag.js",
+  "version": "0.1.0",
+  "homepage": "https://github.com/ebu/radiotag.js",
+  "authors": [
+    "barroco <barroco@ebu.ch>"
+  ],
+  "description": "RadioTAG javascript client implementation",
+  "main": "radiotag-protocol.js",
+  "dependencies": [
+    "require.js"
+  ],
+  "keywords": [
+    "RadioTAG",
+    "CPA",
+    "Broadcasting",
+    "Radio",
+    "Device"
+  ],
+  "license": "BSD 3",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
