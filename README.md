@@ -3,7 +3,7 @@ radiotag.js
 
 This project contains a javascript implementation of a RadioTAG client.
 
-More information on RadioTAG[RadioDNS.org](http://radiodns.org)
+More information on RadioTAG: [RadioDNS.org](http://radiodns.org)
 
 
 ## Related Projects
