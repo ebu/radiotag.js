@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "homepage": "https://github.com/ebu/radiotag.js",
   "authors": [
+    "chrisn <chris.needham@bbc.co.uk>"
     "barroco <barroco@ebu.ch>"
   ],
   "description": "RadioTAG javascript client implementation",
