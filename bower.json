@@ -8,9 +8,7 @@
   ],
   "description": "RadioTAG javascript client implementation",
   "main": "radiotag-protocol.js",
-  "dependencies": [
-    "require.js"
-  ],
+  "dependencies": {},
   "keywords": [
     "RadioTAG",
     "CPA",
