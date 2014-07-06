@@ -7,7 +7,7 @@
     "barroco <barroco@ebu.ch>"
   ],
   "description": "RadioTAG javascript client library",
-  "main": "radiotag-protocol.js",
+  "main": "dist/radiotag.min.js",
   "dependencies": {
     "require.js": "*",
     "jquery": "~2.1.1"

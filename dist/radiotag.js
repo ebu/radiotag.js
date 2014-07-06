@@ -449,8 +449,16 @@ define('radiotag/definition',[], function() {
    *  Define the RadioTAG service endpoints
    */
   return {
-    spTagUrl: 'tag',
-    spListTagsUrl: 'tags'
+    errorMessages: {
+      headerNotFound: 'Missing WWW-Authenticate header.  \
+                      Please, make sure CORS headers are correctly sent. \
+                      ("Access-Control-Expose-Headers: WWW-Authenticate")'
+    },
+
+    endpoints: {
+      spTagUrl: 'tag',
+      spListTagsUrl: 'tags'
+    }
   };
 });
 
@@ -509,6 +517,35 @@ define('request',['jquery'], function($) {
 define('radiotag/protocol',['jquery', './definition', 'request'], function($, definition, req) {
   
 
+
+  /**
+   * [PRIVATE] This method parses the WWW-Authenticate header of the
+   * Service Provider response.
+   *
+   * @param challenge is the value of the WWW-Authenticate header.
+   * @returns An object containing the Authorization Provider URI and the available
+   * modes
+   */
+  var parseWwwAuthenticate = function(challenge) {
+    var regex = /(?:(\w*)\=\"(.*?))*\"/g;
+    var match = [], data = {};
+    while ((match = regex.exec(challenge)) !== null) {
+      data[match[1]] = match[2];
+    }
+
+    var modesArray = data.modes.split(',');
+    var modes = {
+      client:  (modesArray.indexOf('client') !== -1),
+      user:    (modesArray.indexOf('user') !== -1),
+      anonymous: false
+    };
+
+    return {
+      apBaseUrl: data.uri+'/',
+      modes: modes
+    };
+  };
+
   /**
    * [PRIVATE] Extract the tags from the xml document.
    *
@@ -550,7 +587,7 @@ define('radiotag/protocol',['jquery', './definition', 'request'], function($, de
       var body = 'station=' + stationId + '&time=' + Math.floor(new Date().getTime() / 1000);
 
       var requestToken = (!accessToken) ? null : accessToken;
-      req.postForm(domain + definition.spTagUrl, body, requestToken)
+      req.postForm(domain + definition.endpoints.spTagUrl, body, requestToken)
         .success(function(xmlData) {
           var tag = extractTags(xmlData)[0];
 
@@ -569,13 +606,38 @@ define('radiotag/protocol',['jquery', './definition', 'request'], function($, de
      * @param done
      */
     listTags: function(domain, accessToken, done) {
-      req.get(domain + definition.spListTagsUrl, accessToken)
+      req.get(domain + definition.endpoints.spListTagsUrl, accessToken)
         .success(function(xmlData) {
           var tags = extractTags(xmlData);
           done(null, tags);
         })
         .fail(function(err) {
           done(err);
+        });
+    },
+    /**
+     *  Discover the responsible AP and the available modes for a domain
+     *  Application Specific
+     */
+
+    getAuthProvider: function(domain, done) {
+      var callback = function(jqXHR) {
+        var challenge = jqXHR.getResponseHeader('WWW-Authenticate');
+        if (!challenge) {
+          done(new Error(definition.errorMessages.headerNotFound));
+          return;
+        }
+
+        var authProvider = parseWwwAuthenticate(challenge);
+        done(null, authProvider.apBaseUrl, authProvider.modes);
+      };
+
+      return req.postForm(domain + definition.endpoints.spTagUrl)
+        .done(function(body, textStatus, jqXHR) {
+          callback(jqXHR);
+        })
+        .fail(function(jqXHR) {
+          callback(jqXHR);
         });
     }
   };

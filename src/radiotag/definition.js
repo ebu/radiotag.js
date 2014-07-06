@@ -6,7 +6,15 @@ define([], function() {
    *  Define the RadioTAG service endpoints
    */
   return {
-    spTagUrl: 'tag',
-    spListTagsUrl: 'tags'
+    errorMessages: {
+      headerNotFound: 'Missing WWW-Authenticate header.  \
+                      Please, make sure CORS headers are correctly sent. \
+                      ("Access-Control-Expose-Headers: WWW-Authenticate")'
+    },
+
+    endpoints: {
+      spTagUrl: 'tag',
+      spListTagsUrl: 'tags'
+    }
   };
 });
