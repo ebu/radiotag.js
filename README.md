@@ -5,11 +5,81 @@ This project contains a javascript implementation of a RadioTAG client.
 
 More information on RadioTAG: [RadioDNS.org](http://radiodns.org)
 
+RadioTAG is based on [EBU-CPA](http://tech.ebu.ch/cpa) 
+(EBU Cross-Platform Authentication) in order to authenticate tags.
+A javascript library is available here: [cpa.js](https://github.com/ebu/cpa.js)
+
+
+## Usage
+
+### Installation with Bower
+
+[Bower](https://github.com/bower/bower) is a package manager for the web.
+
+> bower install radiotag.js
+
+
+### RequireJS
+
+You can use [RequireJS](http://requirejs.org/) in order to include the cpa library.
+
+> HTML:
+
+    <script data-main="js/main" src="require.js"></script>
+
+> js/main.js 
+
+    require.config({
+      baseUrl: 'js',
+      paths: {
+        'radiotag': '../bower_components/radiotag.js/dist/radiotag.min'
+      }
+    });
+    
+    require(['radiotag'], function(radiotag) {
+      radiotag.getAuthProvider('http://tag.ebu.io/', 
+        function(err, authProvider) {
+          console.log(err, authProvider.apBaseUrl, authProvider.modes);
+        });
+    });
+
+
+### Stand-alone
+
+You can use the RadioTag library directly in the HTML page:
+
+    <script src="radiotag.js"></script>
+
+The `radiotag` object is used to expose the library :
+ 
+    <script>
+       radiotag.getAuthProvider('http://tag.ebu.io/',  
+         function(err, authProvider) {
+           console.log(err, authProvider.apBaseUrl, authProvider.modes);
+         });
+    </script>
+    
+
+## Development 
+
+### Build
+
+> npm install
+
+> bower install
+
+> grunt
+
 
 ## Related Projects
 
-These library has been developed alongside the EBU CPA Client Reference Implementation.
+Cross-Platform Authentication Javascript Library:
+* [CPA.js](https://github.com/ebu/cpa.js)
+
+This library has been developed alongside the EBU CPA Client Reference Implementation.
 * [CPA Client](https://github.com/ebu/cpa-client)
+
+
 
 ## Contributors
 
