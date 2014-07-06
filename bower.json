@@ -6,9 +6,12 @@
     "chrisn <chris.needham@bbc.co.uk>",
     "barroco <barroco@ebu.ch>"
   ],
-  "description": "RadioTAG javascript client implementation",
+  "description": "RadioTAG javascript client library",
   "main": "radiotag-protocol.js",
-  "dependencies": {},
+  "dependencies": {
+    "require.js": "*",
+    "jquery": "~2.1.1"
+  },
   "keywords": [
     "RadioTAG",
     "CPA",
@@ -23,5 +26,8 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "devDependencies": {
+    "almond": "~0.2.9"
+  }
 }
