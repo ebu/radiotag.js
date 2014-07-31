@@ -64,15 +64,15 @@ define(['jquery', './definition', 'request'], function($, definition, req) {
      * Trig a tag on the RadioTAG service.
      *
      * @param stationId RadioDNS broadcast parameters joined with dots of the station the client wants to tag.
-     * @param domain The domain of the RadioTAG service
+     * @param uri The URI of the RadioTAG service
      * @param accessToken The CPA access token which authenticates the request
      * @param done
      */
-    tag: function(stationId, domain, accessToken, done) {
+    tag: function(stationId, uri, accessToken, done) {
       var body = 'station=' + stationId + '&time=' + Math.floor(new Date().getTime() / 1000);
 
       var requestToken = (!accessToken) ? null : accessToken;
-      req.postForm(domain + definition.endpoints.spTagUrl, body, requestToken)
+      req.postForm(uri + definition.endpoints.spTagUrl, body, requestToken)
         .success(function(xmlData) {
           var tag = extractTags(xmlData)[0];
 
@@ -86,12 +86,12 @@ define(['jquery', './definition', 'request'], function($, definition, req) {
     /**
      * Retrieve the list of tags for the device or the user represented by the access token
      *
-     * @param domain The domain of the RadioTAG service
+     * @param uri The URI of the RadioTAG service
      * @param accessToken The CPA access token which authenticates the request
      * @param done
      */
-    listTags: function(domain, accessToken, done) {
-      req.get(domain + definition.endpoints.spListTagsUrl, accessToken)
+    listTags: function(uri, accessToken, done) {
+      req.get(uri + definition.endpoints.spListTagsUrl, accessToken)
         .success(function(xmlData) {
           var tags = extractTags(xmlData);
           done(null, tags);
@@ -103,9 +103,11 @@ define(['jquery', './definition', 'request'], function($, definition, req) {
     /**
      *  Discover the responsible AP and the available modes for a domain
      *  Application Specific
+     *
+     *  @param uri The URI of the RadioTAG service
      */
 
-    getAuthProvider: function(domain, done) {
+    getAuthProvider: function(uri, done) {
       var callback = function(jqXHR) {
         var challenge = jqXHR.getResponseHeader('WWW-Authenticate');
         if (!challenge) {
@@ -117,7 +119,7 @@ define(['jquery', './definition', 'request'], function($, definition, req) {
         done(null, authProvider.apBaseUrl, authProvider.modes);
       };
 
-      return req.postForm(domain + definition.endpoints.spTagUrl)
+      return req.postForm(uri + definition.endpoints.spTagUrl)
         .done(function(body, textStatus, jqXHR) {
           callback(jqXHR);
         })
