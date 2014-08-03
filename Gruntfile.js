@@ -48,8 +48,8 @@ module.exports = function(grunt) {
     },
 
     watch: {
-      files: ['src/*', 'src/utils/*', 'src/radiotag/*.js'],
-      tasks: ['requirejs', 'jshint']
+      files: ['src/*', 'src/utils/*', 'src/radiotag/*.js', 'test/*.js'],
+      tasks: ['requirejs', 'uglify', 'qunit']
     }
   });
 
@@ -60,5 +60,5 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-requirejs');
 
   grunt.registerTask('test', ['jshint', 'qunit']);
-  grunt.registerTask('default', ['requirejs', 'jshint', 'qunit', 'uglify']);
+  grunt.registerTask('default', ['requirejs', 'jshint', 'uglify', 'qunit']);
 };

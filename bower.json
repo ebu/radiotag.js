@@ -9,7 +9,9 @@
   "description": "RadioTAG javascript client library",
   "main": "dist/radiotag.min.js",
   "dependencies": {
-    "jquery": "~2.1.1"
+  "dependencies": {
+    "jquery": "~2.1.1",
+    "URIjs": "~1.13.2"
   },
   "keywords": [
     "RadioTAG",
