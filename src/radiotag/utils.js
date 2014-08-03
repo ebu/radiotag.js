@@ -1,12 +1,12 @@
 /*global define*/
 define(['URIjs/URI'], function(URI) {
   'use strict';
-
   return {
     getUri: function(domain, http) {
       return new URI({
         protocol: http ? 'http' : 'https',
-        hostname: domain
+        hostname: domain,
+        path: '/'
       });
     },
 

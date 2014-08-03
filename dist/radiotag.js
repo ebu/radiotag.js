@@ -3594,12 +3594,12 @@ define('radiotag/protocol',['jquery', './definition', 'request'], function($, de
 /*global define*/
 define('radiotag/utils',['URIjs/URI'], function(URI) {
   
-
   return {
     getUri: function(domain, http) {
       return new URI({
         protocol: http ? 'http' : 'https',
-        hostname: domain
+        hostname: domain,
+        path: '/'
       });
     },
 
