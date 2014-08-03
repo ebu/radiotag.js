@@ -4,12 +4,25 @@ define(['URIjs/URI'], function(URI) {
 
   return {
     getUri: function(domain, http) {
-      var proto = (http)? 'http://' : 'https://';
-      return new URI(proto + domain);
+      return new URI({
+        protocol: http ? 'http' : 'https',
+        hostname: domain
+      });
     },
 
     getDomain: function(uri) {
-      return uri._parts.hostname + ':' + uri._parts.port;
+      if (typeof uri === 'string') {
+        uri = new URI(uri);
+      }
+
+      var domain = uri.hostname();
+      var port = uri.port();
+
+      if (port) {
+        domain += ':' + port;
+      }
+
+      return domain;
     }
   };
 });

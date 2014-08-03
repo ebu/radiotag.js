@@ -48,8 +48,8 @@ module.exports = function(grunt) {
     },
 
     watch: {
-      files: ['src/*', 'src/utils/*', 'src/radiotag/*.js'],
-      tasks: ['requirejs', 'jshint', 'uglify', 'qunit']
+      files: ['src/*', 'src/utils/*', 'src/radiotag/*.js', 'test/*.js'],
+      tasks: ['requirejs', 'uglify', 'qunit']
     }
   });
 
