@@ -20,5 +20,6 @@
   "trailing": true,
   "smarttabs": false,
   "indent": 2,
-  "multistr": true
+  "multistr": true,
+  "globalstrict": true
 }

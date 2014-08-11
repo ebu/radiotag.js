@@ -9,24 +9,16 @@ module.exports = function(grunt) {
       },
       dist: {
         files: {
-          'dist/<%= pkg.name.replace(".js", "") %>.min.js': ['<%= requirejs.compile.options.out %>']
+          'dist/<%= pkg.name.replace(".js", "") %>.min.js': ['dist/<%= pkg.name %>']
         }
       }
     },
 
-    requirejs: {
-      compile: {
-        options: {
-          optimize: 'none',
-          name: 'lib/almond/almond',
-          baseUrl: 'src',
-          include: ['main'],
-          mainConfigFile: 'src/main.js',
-          out: 'dist/radiotag.js',
-          wrap: {
-            startFile: 'src/wrap/_start.js',
-            endFile: 'src/wrap/_end.js'
-          }
+    browserify: {
+      'dist/radiotag.js': ['src/main.js'],
+      options: {
+        bundleOptions: {
+          standalone: '<%= pkg.name.replace(".js", "") %>'
         }
       }
     },
@@ -58,7 +50,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-qunit');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-requirejs');
+  grunt.loadNpmTasks('grunt-browserify');
 
   grunt.registerTask('test', ['jshint', 'qunit']);
-  grunt.registerTask('default', ['requirejs', 'jshint', 'uglify', 'qunit']);
+  grunt.registerTask('default', ['browserify', 'jshint', 'uglify', 'qunit']);
 };

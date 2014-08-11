@@ -1,7 +1,9 @@
-/*global define*/
-define('radiotag', ['./radiotag/protocol', './radiotag/utils'], function(protocol, utils) {
-  'use strict';
+/*global require, module*/
+'use strict';
 
-  protocol.utils = utils;
-  return protocol;
-});
+var protocol = require('./radiotag/protocol'),
+    utils    = require('./radiotag/utils');
+
+protocol.utils = utils;
+
+module.exports = protocol;
