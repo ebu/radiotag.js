@@ -1,7 +1,11 @@
 {
   "name": "radiotag.js",
   "version": "0.0.0",
-  "main": "dist/radiotag.min.js",
+  "main": "src/main.js",
+  "browser": {
+    "./src/utils/http-request.js": "./src/utils/browser-http-request.js",
+    "cheerio": "jquery"
+  },
   "description": "RadioTAG javascript client library",
   "repository": {
     "type": "git",
@@ -11,7 +15,12 @@
   "author": "barroco <barroco@ebu.ch>",
   "license": "BSD 3",
   "readmeFilename": "README.md",
-  "dependencies": {},
+  "dependencies": {
+    "cheerio": "~0.17.0",
+    "request": "~2.40.0",
+    "es6-promise": "~1.0.0",
+    "URIjs": "~1.13.2"
+  },
   "devDependencies": {
     "grunt-contrib-concat": "~0.3.0",
     "grunt-contrib-jshint": "~0.6.4",
@@ -21,6 +30,7 @@
     "grunt-contrib-qunit": "~0.3.0",
     "grunt-contrib-requirejs": "~0.4.4",
     "grunt-browserify": "~2.1.4",
-    "jquery": "~2.1.1"
+    "jquery": "~2.1.1",
+    "browserify": "~5.10.0"
   }
 }
