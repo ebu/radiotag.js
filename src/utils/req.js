@@ -1,7 +1,7 @@
 /*global require, module*/
 'use strict';
 
-var $ = require('jquery');
+var ajax = require('./http-request');
   
 /**
  * Wrapper to simplify Http Asynchronous calls.
@@ -9,41 +9,35 @@ var $ = require('jquery');
 
 module.exports = {
   postJSON: function(url, body, accessToken) {
-    return $.ajax({
+    return ajax({
       type: 'POST',
       url: url,
       data: JSON.stringify(body),
       contentType: 'application/json',
-      beforeSend: function(xhr) {
-        if (accessToken) {
-          xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
-        }
+      headers: {
+        'Authorization': 'Bearer ' + accessToken
       }
     });
   },
 
   postForm: function(url, uriEncodedBody, accessToken) {
-    return $.ajax({
+    return ajax({
       type: 'POST',
       url: url,
       contentType: 'application/x-www-form-urlencoded',
       data: uriEncodedBody,
-      beforeSend: function(xhr) {
-        if (accessToken) {
-          xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
-        }
+      headers: {
+        'Authorization': 'Bearer ' + accessToken
       }
     });
   },
 
   get: function(url, accessToken) {
-    return $.ajax({
+    return ajax({
       type: 'GET',
       url: url,
-      beforeSend: function(xhr) {
-        if (accessToken) {
-          xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
-        }
+      headers: {
+        'Authorization': 'Bearer ' + accessToken
       }
     });
   }

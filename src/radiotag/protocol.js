@@ -1,7 +1,7 @@
 /*global require, module*/
 'use strict';
 
-var $          = require('jquery'),
+var $          = require('cheerio'),
     definition = require('./definition'),
     req        = require('../utils/req');
 
@@ -43,15 +43,15 @@ var parseWwwAuthenticate = function(challenge) {
 var extractTags = function(xmlData) {
   var tags = [];
   var doc = $(xmlData);
-  var author = doc.find('author').find('name')[0].textContent;
-  var entries = doc.find('feed').find('entry');
+  var author = doc.find('author name').first().text();
+  var entries = doc.find('entry');
 
   for (var i = 0; i < entries.length; i++) {
     var tag = {
       author: author,
-      title: $(entries[i]).find('title')[0].textContent,
-      summary: $(entries[i]).find('summary')[0].textContent,
-      publishedDate: $(entries[i]).find('published')[0].textContent
+      title: $(entries[i]).find('title').first().text(),
+      summary: $(entries[i]).find('summary').first().text(),
+      publishedDate: $(entries[i]).find('published').first().text()
     };
 
     tags.push(tag);
@@ -75,14 +75,16 @@ module.exports = {
 
     var requestToken = (!accessToken) ? null : accessToken;
     req.postForm(uri + definition.endpoints.spTagUrl, body, requestToken)
-      .success(function(xmlData) {
-        var tag = extractTags(xmlData)[0];
+      .then(
+        function(xmlData) {
+          var tag = extractTags(xmlData)[0];
 
-        done(null, tag);
-      })
-      .fail(function(err) {
-        done(err);
-      });
+          done(null, tag);
+        },
+        function(err) {
+          done(err);
+        }
+      );
   },
 
   /**
@@ -94,13 +96,15 @@ module.exports = {
    */
   listTags: function(uri, accessToken, done) {
     req.get(uri + definition.endpoints.spListTagsUrl, accessToken)
-      .success(function(xmlData) {
-        var tags = extractTags(xmlData);
-        done(null, tags);
-      })
-      .fail(function(err) {
-        done(err);
-      });
+      .then(
+        function(xmlData) {
+          var tags = extractTags(xmlData);
+          done(null, tags);
+        },
+        function(err) {
+          done(err);
+        }
+      );
   },
   /**
    *  Discover the responsible AP and the available modes for a domain
@@ -122,11 +126,13 @@ module.exports = {
     };
 
     return req.postForm(uri + definition.endpoints.spTagUrl)
-      .done(function(body, textStatus, jqXHR) {
-        callback(jqXHR);
-      })
-      .fail(function(jqXHR) {
-        callback(jqXHR);
-      });
+      .then(
+        function(body, textStatus, jqXHR) {
+          callback(jqXHR);
+        },
+        function(jqXHR) {
+          callback(jqXHR);
+        }
+      );
   }
 };

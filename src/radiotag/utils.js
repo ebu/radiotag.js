@@ -1,7 +1,7 @@
 /*global require, module*/
 'use strict';
 
-var URI = require('../lib/URIjs/src/URI');
+var URI = require('URIjs');
 
 module.exports = {
   getUri: function(domain, http) {
