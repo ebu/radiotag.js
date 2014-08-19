@@ -85,6 +85,7 @@ This library has been developed alongside the EBU CPA Client Reference Implement
 
 * [Chris Needham](https://github.com/chrisn) (BBC)
 * [Michael Barroco](https://github.com/barroco) (EBU)
+* [Thomas Parisot](https://github.com/oncletom) (BBC)
 
 ## Copyright & License
 
