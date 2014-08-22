@@ -4,28 +4,50 @@
 var request = require('request'),
     Promise = require('es6-promise').Promise;
 
+function isErrorStatusCode(statusCode) {
+  return statusCode === 0 || (statusCode >= 400 && statusCode < 600);
+}
+
 /*
-  Accepts a jQuery.ajax-compatible hash 
-  of parameters and performs an HTTP-request
+  Accepts a hash of parameters, performs an
+  HTTP-request.
+  Returns a promise that resolves with a
+  normalised response object containing:
+    - statusCode,
+    - headers
+    - body
+    - error
 */
 module.exports = function (params) {
   return new Promise(function (resolve, reject) {
-    
-    params.method = params.type;
-    delete params.type;
+    var normalised = {
+      headers: null,
+      body: null,
+      error: null,
+      statusCode: null
+    };
 
-    params.headers['Content-Type'] = params.contentType;
-    params.body = params.data;
-    
-    request(params, function (error, req, responseBody) {
-      // jQuery API
-      req.getResponseHeader = req.getHeader;
-
-      // body, textStatus, jqXHR
+    request(params, function (error, response, responseBody) {
       if (error) {
-        reject(error);
+        normalised.error = error;
+      }
+
+      if (response.headers) {
+        normalised.headers = response.headers;
+      }
+
+      if (responseBody) {
+        normalised.body = responseBody;
+      }
+
+      if (response.statusCode) {
+        normalised.statusCode = response.statusCode;
+      }
+
+      if (error || isErrorStatusCode(response.statusCode)) {
+        reject(normalised);
       } else {
-        resolve(responseBody, req.statusCode, req);
+        resolve(normalised);
       }
     });
   });

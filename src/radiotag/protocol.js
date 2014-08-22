@@ -76,13 +76,13 @@ module.exports = {
     var requestToken = (!accessToken) ? null : accessToken;
     req.postForm(uri + definition.endpoints.spTagUrl, body, requestToken)
       .then(
-        function(xmlData) {
-          var tag = extractTags(xmlData)[0];
+        function(response) {
+          var tag = extractTags(response.body)[0];
 
           done(null, tag);
         },
-        function(err) {
-          done(err);
+        function(response) {
+          done(response);
         }
       );
   },
@@ -97,12 +97,12 @@ module.exports = {
   listTags: function(uri, accessToken, done) {
     req.get(uri + definition.endpoints.spListTagsUrl, accessToken)
       .then(
-        function(xmlData) {
-          var tags = extractTags(xmlData);
+        function(response) {
+          var tags = extractTags(response.body);
           done(null, tags);
         },
-        function(err) {
-          done(err);
+        function(response) {
+          done(response);
         }
       );
   },
@@ -114,8 +114,8 @@ module.exports = {
    */
 
   getAuthProvider: function(uri, done) {
-    var callback = function(jqXHR) {
-      var challenge = jqXHR.getResponseHeader('WWW-Authenticate');
+    var callback = function(response) {
+      var challenge = response.headers['www-authenticate'];
       if (!challenge) {
         done(new Error(definition.errorMessages.headerNotFound));
         return;
@@ -127,11 +127,11 @@ module.exports = {
 
     return req.postForm(uri + definition.endpoints.spTagUrl)
       .then(
-        function(body, textStatus, jqXHR) {
-          callback(jqXHR);
+        function(response) {
+          callback(response);
         },
-        function(jqXHR) {
-          callback(jqXHR);
+        function(response) {
+          callback(response);
         }
       );
   }
