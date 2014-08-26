@@ -1,13 +1,15 @@
-test("The object radiotag exists", function() {
-  ok(radiotag);
-});
+describe("The radiotag object", function() {
+  it("should exist", function() {
+    expect(radiotag).to.be.ok;
+  });
 
-test("The protocol calls are present", function() {
-  ok(radiotag.tag);
-  ok(radiotag.listTags);
-});
+  it("should contain protocol calls", function() {
+    expect(radiotag.tag).to.be.a("function");
+    expect(radiotag.listTags).to.be.a("function");
+  });
 
-test("Utils functions are available", function() {
-  ok(radiotag.utils.getUri);
-  ok(radiotag.utils.getDomain);
+  it("should contain utils functions", function() {
+    expect(radiotag.utils.getUri).to.be.a("function");
+    expect(radiotag.utils.getDomain).to.be.a("function");
+  });
 });

@@ -10,7 +10,9 @@
   "main": "dist/radiotag.min.js",
   "dependencies": {
     "jquery": "~2.1.1",
-    "URIjs": "~1.13.2"
+    "URIjs": "~1.13.2",
+    "chai": "~1.9.1",
+    "mocha": "~1.21.4"
   },
   "keywords": [
     "RadioTAG",
