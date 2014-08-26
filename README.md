@@ -1,6 +1,8 @@
 radiotag.js
 ===========
 
+[![Build Status](https://travis-ci.org/ebu/radiotag.js.svg?branch=master)](https://travis-ci.org/ebu/radiotag.js)
+
 This project contains a javascript implementation of a RadioTAG client.
 
 More information on RadioTAG: [RadioDNS.org](http://radiodns.org)
