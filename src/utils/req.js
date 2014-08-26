@@ -1,50 +1,58 @@
-/*global define*/
-define(['jquery'], function($) {
-  'use strict';
+/*global require, module*/
+'use strict';
 
-  /**
-   * Wrapper to simplify Http Asynchronous calls.
-   */
+var ajax = require('./http-request');
 
-  return {
-    postJSON: function(url, body, accessToken) {
-      return $.ajax({
-        type: 'POST',
-        url: url,
-        data: JSON.stringify(body),
-        contentType: 'application/json',
-        beforeSend: function(xhr) {
-          if (accessToken) {
-            xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
-          }
-        }
-      });
-    },
+/**
+ * Wrapper to simplify Http Asynchronous calls.
+ */
 
-    postForm: function(url, uriEncodedBody, accessToken) {
-      return $.ajax({
-        type: 'POST',
-        url: url,
-        contentType: 'application/x-www-form-urlencoded',
-        data: uriEncodedBody,
-        beforeSend: function(xhr) {
-          if (accessToken) {
-            xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
-          }
-        }
-      });
-    },
+module.exports = {
+  postJSON: function(url, body, accessToken) {
+    var params = {
+      method: 'POST',
+      url: url,
+      body: JSON.stringify(body),
+      headers: {
+        'Content-Type' : 'application/json'
+      }
+    };
 
-    get: function(url, accessToken) {
-      return $.ajax({
-        type: 'GET',
-        url: url,
-        beforeSend: function(xhr) {
-          if (accessToken) {
-            xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
-          }
-        }
-      });
+    if (accessToken) {
+      params.headers.Authorization = 'Bearer ' + accessToken;
     }
-  };
-});
+
+    return ajax(params);
+  },
+
+  postForm: function(url, uriEncodedBody, accessToken) {
+    var params = {
+      method: 'POST',
+      url: url,
+      body: uriEncodedBody,
+      headers: {
+        'Content-Type' : 'application/x-www-form-urlencoded'
+      }
+    };
+
+    if (accessToken) {
+      params.headers.Authorization = 'Bearer ' + accessToken;
+    }
+
+    return ajax(params);
+  },
+
+  get: function(url, accessToken) {
+    var params = {
+      method: 'GET',
+      url: url,
+      headers: {}
+    };
+
+    if (accessToken) {
+      params.headers.Authorization = 'Bearer ' + accessToken;
+    }
+
+    return ajax(params);
+  }
+};

@@ -59,6 +59,20 @@ The `radiotag` object is used to expose the library :
          });
     </script>
     
+### Node.JS
+
+Install the radiotag.js package using NPM:
+
+    npm install radiotag.js
+
+Use require to access within node:
+
+    var radiotag = require('radiotag.js');
+
+    radiotag.getAuthProvider('http://tag.ebu.io/',  
+     function(err, authProviderBaseUrl, modes) {
+       console.log(err, authProviderBaseUrl, modes);
+     });
 
 ## Development 
 
@@ -86,6 +100,7 @@ This library has been developed alongside the EBU CPA Client Reference Implement
 * [Chris Needham](https://github.com/chrisn) (BBC)
 * [Michael Barroco](https://github.com/barroco) (EBU)
 * [Thomas Parisot](https://github.com/oncletom) (BBC)
+* [Andrew Nicolaou](https://github.com/andrewn) (BBC)
 
 ## Copyright & License
 
