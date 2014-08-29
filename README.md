@@ -3,13 +3,13 @@ radiotag.js
 
 [![Build Status](https://travis-ci.org/ebu/radiotag.js.svg?branch=master)](https://travis-ci.org/ebu/radiotag.js)
 
-This project contains a javascript implementation of a RadioTAG client.
+This project contains a JavaScript implementation of a RadioTAG client.
 
 More information on RadioTAG: [RadioDNS.org](http://radiodns.org)
 
-RadioTAG is based on [EBU-CPA](http://tech.ebu.ch/cpa) 
+RadioTAG is based on [EBU-CPA](http://tech.ebu.ch/cpa)
 (EBU Cross-Platform Authentication) in order to authenticate tags.
-A javascript library is available here: [cpa.js](https://github.com/ebu/cpa.js)
+A JavaScript library is available here: [cpa.js](https://github.com/ebu/cpa.js)
 
 
 ## Usage
@@ -23,13 +23,13 @@ A javascript library is available here: [cpa.js](https://github.com/ebu/cpa.js)
 
 ### RequireJS
 
-You can use [RequireJS](http://requirejs.org/) in order to include the cpa library.
+You can use [RequireJS](http://requirejs.org/) in order to include the radiotag.js library.
 
 > HTML:
 
     <script data-main="js/main" src="require.js"></script>
 
-> js/main.js 
+> js/main.js
 
     require.config({
       baseUrl: 'js',
@@ -37,9 +37,9 @@ You can use [RequireJS](http://requirejs.org/) in order to include the cpa libra
         'radiotag': '../bower_components/radiotag.js/dist/radiotag.min'
       }
     });
-    
+
     require(['radiotag'], function(radiotag) {
-      radiotag.getAuthProvider('http://tag.ebu.io/', 
+      radiotag.getAuthProvider('http://tag.ebu.io/',
         function(err, authProvider) {
           console.log(err, authProvider.apBaseUrl, authProvider.modes);
         });
@@ -48,35 +48,35 @@ You can use [RequireJS](http://requirejs.org/) in order to include the cpa libra
 
 ### Stand-alone
 
-You can use the RadioTag library directly in the HTML page:
+You can use the radiotag.js library directly in the HTML page:
 
     <script src="radiotag.js"></script>
 
-The `radiotag` object is used to expose the library :
- 
+The `radiotag` object is used to expose the library:
+
     <script>
-       radiotag.getAuthProvider('http://tag.ebu.io/',  
+       radiotag.getAuthProvider('http://tag.ebu.io/',
          function(err, authProvider) {
            console.log(err, authProvider.apBaseUrl, authProvider.modes);
          });
     </script>
-    
-### Node.JS
+
+### Node.js
 
 Install the radiotag.js package using NPM:
 
     npm install radiotag.js
 
-Use require to access within node:
+Use `require` to access within Node.js:
 
     var radiotag = require('radiotag.js');
 
-    radiotag.getAuthProvider('http://tag.ebu.io/',  
+    radiotag.getAuthProvider('http://tag.ebu.io/',
      function(err, authProviderBaseUrl, modes) {
        console.log(err, authProviderBaseUrl, modes);
      });
 
-## Development 
+## Development
 
 ### Build
 
@@ -89,18 +89,17 @@ Use require to access within node:
 
 ## Related Projects
 
-Cross-Platform Authentication Javascript Library:
+Cross-Platform Authentication JavaScript Library:
 * [CPA.js](https://github.com/ebu/cpa.js)
 
 This library has been developed alongside the EBU CPA Client Reference Implementation.
 * [CPA Client](https://github.com/ebu/cpa-client)
 
 
-
 ## Contributors
 
-* [Chris Needham](https://github.com/chrisn) (BBC)
 * [Michael Barroco](https://github.com/barroco) (EBU)
+* [Chris Needham](https://github.com/chrisn) (BBC)
 * [Thomas Parisot](https://github.com/oncletom) (BBC)
 * [Andrew Nicolaou](https://github.com/andrewn) (BBC)
 
