@@ -65,13 +65,17 @@ module.exports = {
   /**
    * Trig a tag on the RadioTAG service.
    *
-   * @param stationId RadioDNS broadcast parameters joined with dots of the station the client wants to tag.
+   * @param bearer Bearer URI for the radio service being tagged
+   * @param timeSource The system clock's source of time (either 'broadcast', 'user' or 'ntp')
    * @param uri The URI of the RadioTAG service
    * @param accessToken The CPA access token which authenticates the request
    * @param done
    */
-  tag: function(stationId, uri, accessToken, done) {
-    var body = 'station=' + stationId + '&time=' + Math.floor(new Date().getTime() / 1000);
+  tag: function(bearer, timeSource, uri, accessToken, done) {
+    var body = 'bearer=' + bearer + '&time=' + Math.floor(new Date().getTime() / 1000);
+    if (timeSource) {
+      body += '&time_source=' + timeSource;
+    }
 
     var requestToken = (!accessToken) ? null : accessToken;
     req.postForm(uri + definition.endpoints.spTagUrl, body, requestToken)
