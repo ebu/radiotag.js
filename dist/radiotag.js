@@ -12865,8 +12865,8 @@ module.exports = {
   },
 
   endpoints: {
-    spTagUrl: 'tag',
-    spListTagsUrl: 'tags'
+    spTagUrl: '/radiodns/tag/1/tag',
+    spListTagsUrl: '/radiodns/tag/1/tags'
   }
 };
 },{}],20:[function(_dereq_,module,exports){
