@@ -102,6 +102,7 @@ This library has been developed alongside the EBU CPA Client Reference Implement
 * [Chris Needham](https://github.com/chrisn) (BBC)
 * [Thomas Parisot](https://github.com/oncletom) (BBC)
 * [Andrew Nicolaou](https://github.com/andrewn) (BBC)
+* [Andy Buckingham](https://github.com/andybee) (Togglebit)
 
 ## Copyright & License
 

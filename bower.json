@@ -1,10 +1,13 @@
 {
   "name": "radiotag.js",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "homepage": "https://github.com/ebu/radiotag.js",
   "authors": [
-    "chrisn <chris.needham@bbc.co.uk>",
-    "barroco <barroco@ebu.ch>"
+    "Michael Barroco (https://github.com/barroco)",
+    "Chris Needham (https://github.com/chrisn)",
+    "Thomas Parisot (https://github.com/oncletom)",
+    "Andrew Nicolaou (https://github.com/andrewn)",
+    "Andy Buckingham (https://github.com/andybee)"
   ],
   "description": "RadioTAG javascript client library",
   "main": "dist/radiotag.min.js",

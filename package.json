@@ -1,6 +1,6 @@
 {
   "name": "radiotag.js",
-  "version": "0.0.0",
+  "version": "0.2.0",
   "main": "src/main.js",
   "browser": {
     "./src/utils/http-request.js": "./src/utils/browser-http-request.js",
@@ -12,7 +12,13 @@
     "url": "git://github.com/ebu/radiotag.js.git"
   },
   "keywords": [],
-  "author": "barroco <barroco@ebu.ch>",
+  "contributors": [
+    "Michael Barroco (https://github.com/barroco)",
+    "Chris Needham (https://github.com/chrisn)",
+    "Thomas Parisot (https://github.com/oncletom)",
+    "Andrew Nicolaou (https://github.com/andrewn)",
+    "Andy Buckingham (https://github.com/andybee)"
+  ],
   "license": "BSD 3",
   "readmeFilename": "README.md",
   "dependencies": {
