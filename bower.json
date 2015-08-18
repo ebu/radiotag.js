@@ -1,6 +1,6 @@
 {
   "name": "radiotag.js",
-  "version": "0.2.0",
+  "version": "1.0.3",
   "homepage": "https://github.com/ebu/radiotag.js",
   "authors": [
     "Michael Barroco (https://github.com/barroco)",
@@ -9,7 +9,7 @@
     "Andrew Nicolaou (https://github.com/andrewn)",
     "Andy Buckingham (https://github.com/andybee)"
   ],
-  "description": "RadioTAG javascript client library",
+  "description": "RadioTAG client library",
   "main": "dist/radiotag.min.js",
   "dependencies": {
     "jquery": "~2.1.1",
