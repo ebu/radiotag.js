@@ -1,20 +1,21 @@
 /*global require, module*/
 'use strict';
 
-var ajax = require('./http-request');
+var ajax = require('./http-request'),
+    URI  = require('URIjs');
 
 /**
- * Wrapper to simplify Http Asynchronous calls.
+ * Wrapper to simplify asynchronous HTTP calls.
  */
 
 module.exports = {
-  postJSON: function(url, body, accessToken) {
+  postJSON: function(url, data, accessToken) {
     var params = {
       method: 'POST',
       url: url,
-      body: JSON.stringify(body),
+      body: JSON.stringify(data),
       headers: {
-        'Content-Type' : 'application/json'
+        'Content-Type': 'application/json'
       }
     };
 
@@ -25,13 +26,13 @@ module.exports = {
     return ajax(params);
   },
 
-  postForm: function(url, uriEncodedBody, accessToken) {
+  postForm: function(url, data, accessToken) {
     var params = {
       method: 'POST',
       url: url,
-      body: uriEncodedBody,
+      body: URI.buildQuery(data),
       headers: {
-        'Content-Type' : 'application/x-www-form-urlencoded'
+        'Content-Type': 'application/x-www-form-urlencoded'
       }
     };
 

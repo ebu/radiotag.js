@@ -12,10 +12,10 @@
   "description": "RadioTAG client library",
   "main": "dist/radiotag.min.js",
   "dependencies": {
-    "jquery": "~2.1.1",
-    "URIjs": "~1.13.2",
     "chai": "~1.9.1",
-    "mocha": "~1.21.4"
+    "jquery": "~2.1.1",
+    "mocha": "~1.21.4",
+    "URIjs": "~1.16.0"
   },
   "keywords": [
     "RadioTAG",

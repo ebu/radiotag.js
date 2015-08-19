@@ -1,8 +1,9 @@
 /*global module*/
 
 /**
- *  Define the RadioTAG service endpoints
+ * Define the RadioTAG service endpoints
  */
+
 module.exports = {
   errorMessages: {
     headerNotFound: 'Missing WWW-Authenticate header.  \

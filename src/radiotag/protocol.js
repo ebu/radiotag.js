@@ -3,16 +3,19 @@
 
 var $          = require('cheerio'),
     definition = require('./definition'),
-    req        = require('../utils/req');
+    req        = require('../utils/req'),
+    URI        = require('URIjs');
 
 /**
- * [PRIVATE] This method parses the WWW-Authenticate header of the
- * Service Provider response.
+ * Parses the WWW-Authenticate header of the Service Provider response.
  *
  * @param challenge is the value of the WWW-Authenticate header.
- * @returns An object containing the Authorization Provider URI and the available
- * modes
+ * @returns An object containing the Authorization Provider URI and the
+ * available modes.
+ *
+ * @private
  */
+
 var parseWwwAuthenticate = function(challenge) {
   var regex = /(?:(\w*)\=\"(.*?))*\"/g;
   var match = [], data = {};
@@ -34,12 +37,15 @@ var parseWwwAuthenticate = function(challenge) {
 };
 
 /**
- * [PRIVATE] Extract the tags from the xml document.
+ * Extracts the tags from the XML document.
  *
- * @param xmlData represent the source document
+ * @param xmlData the source document.
  * @returns an array of tags containing the following fields:
- * author, title, summary, publishedDate
+ * author, title, summary, publishedDate.
+ *
+ * @private
  */
+
 var extractTags = function(xmlData) {
   var tags = [];
   var doc = $(xmlData);
@@ -60,25 +66,46 @@ var extractTags = function(xmlData) {
   return tags;
 };
 
+var uriWithPath = function(uri, path) {
+  return URI(uri).path(path).toString();
+};
+
+var getTagUrl = function(uri) {
+  return uriWithPath(uri, definition.endpoints.spTagUrl);
+};
+
+var getTagsUrl = function(uri) {
+  return uriWithPath(uri, definition.endpoints.spListTagsUrl);
+};
+
 module.exports = {
 
   /**
-   * Trig a tag on the RadioTAG service.
+   * Posts a tag to the RadioTAG service.
    *
    * @param bearer Bearer URI for the radio service being tagged
-   * @param timeSource The system clock's source of time (either 'broadcast', 'user' or 'ntp')
+   * @param timeSource The system clock's source of time (either 'broadcast',
+   * 'user' or 'ntp')
    * @param uri The URI of the RadioTAG service
    * @param accessToken The CPA access token which authenticates the request
    * @param done
    */
+
   tag: function(bearer, timeSource, uri, accessToken, done) {
-    var body = 'bearer=' + bearer + '&time=' + Math.floor(new Date().getTime() / 1000);
+    var data = {
+      bearer: bearer,
+      time:   Math.floor(new Date().getTime() / 1000)
+    };
+
     if (timeSource) {
-      body += '&time_source=' + timeSource;
+      // jshint -W106
+      data.time_source = timeSource;
+      // jshint +W106
     }
 
-    var requestToken = (!accessToken) ? null : accessToken;
-    req.postForm(uri + definition.endpoints.spTagUrl, body, requestToken)
+    var tagUrl = getTagUrl(uri);
+
+    req.postForm(tagUrl, data, accessToken)
       .then(
         function(response) {
           var tag = extractTags(response.body)[0];
@@ -92,14 +119,18 @@ module.exports = {
   },
 
   /**
-   * Retrieve the list of tags for the device or the user represented by the access token
+   * Retrieves the list of tags for the device or the user represented by the
+   * access token
    *
    * @param uri The URI of the RadioTAG service
    * @param accessToken The CPA access token which authenticates the request
    * @param done
    */
+
   listTags: function(uri, accessToken, done) {
-    req.get(uri + definition.endpoints.spListTagsUrl, accessToken)
+    var tagsUrl = getTagsUrl(uri);
+
+    req.get(tagsUrl, accessToken)
       .then(
         function(response) {
           var tags = extractTags(response.body);
@@ -110,16 +141,19 @@ module.exports = {
         }
       );
   },
+
   /**
-   *  Discover the responsible AP and the available modes for a domain
-   *  Application Specific
+   * Discovers the CPA Auth Provider associated with the RadioTAG service, and
+   * the available authentication modes
    *
-   *  @param uri The URI of the RadioTAG service
+   * @param uri The URI of the RadioTAG service
+   * @param done
    */
 
   getAuthProvider: function(uri, done) {
     var callback = function(response) {
       var challenge = response.headers['www-authenticate'];
+
       if (!challenge) {
         done(new Error(definition.errorMessages.headerNotFound));
         return;
@@ -129,14 +163,9 @@ module.exports = {
       done(null, authProvider.apBaseUrl, authProvider.modes);
     };
 
-    return req.postForm(uri + definition.endpoints.spTagUrl)
-      .then(
-        function(response) {
-          callback(response);
-        },
-        function(response) {
-          callback(response);
-        }
-      );
+    var tagUrl = getTagUrl(uri);
+
+    return req.postForm(tagUrl)
+      .then(callback, callback);
   }
 };
