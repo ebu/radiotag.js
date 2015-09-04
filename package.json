@@ -1,6 +1,6 @@
 {
   "name": "radiotag.js",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "main": "src/main.js",
   "browser": {
     "./src/utils/http-request.js": "./src/utils/browser-http-request.js",
