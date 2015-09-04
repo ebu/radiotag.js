@@ -55,14 +55,13 @@ module.exports = function(grunt) {
 
     watch: {
       files: ['src/*', 'src/utils/*', 'src/radiotag/*.js', 'test/*.js'],
-      tasks: ['requirejs', 'uglify', 'mocha']
+      tasks: ['jshint', 'browserify', 'uglify', 'mocha']
     }
   });
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-contrib-requirejs');
   grunt.loadNpmTasks('grunt-mocha');
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-jsdoc');
