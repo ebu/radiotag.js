@@ -83,6 +83,24 @@ var getTagsUrl = function(baseUrl) {
 var RadioTAG = {
 
   /**
+   * Callback function for the {@link RadioTAG.tag} function.
+   *
+   * @callback tagCallback
+   * @param {Error|null} error On success, this value is <code>null</code>;
+   *   on error, it is an <code>Error</code> object containing an error message.
+   * @param {Object|null} data On success, this value is an object containing
+   *   the information described below; on error, this value is
+   *   <code>null</code>
+   * @param {string} data.author The name of the service provider.
+   * @param {string} data.title A title associated with the tag, such as the
+   *   name of the radio programme.
+   * @param {string} data.summary A brief description associated with the tag,
+   *   such as artist and song title, or more information about the radio
+   *   programme.
+   * @param {string} data.publishedDate The time of the tag.
+   */
+
+  /**
    * Posts a tag to the RadioTAG service.
    *
    * @param {string|URI} baseUrl The base URL of the RadioTAG service.
@@ -92,7 +110,7 @@ var RadioTAG = {
    * @param {Date} time The time of the tag.
    * @param {string} accessToken The CPA access token which authenticates
    *   the request.
-   * @param done
+   * @param {tagCallback} done Callback function.
    */
 
   tag: function(baseUrl, bearer, timeSource, time, accessToken, done) {
@@ -123,13 +141,31 @@ var RadioTAG = {
   },
 
   /**
+   * Callback function for the {@link RadioTAG.getTags} function.
+   *
+   * @callback getTagsCallback
+   * @param {Error|null} error On success, this value is <code>null</code>;
+   *   on error, it is an <code>Error</code> object containing an error message.
+   * @param {Object|null} data On success, this value is an array of objects,
+   *   each containing the information described below; on error, this value is
+   *   <code>null</code>
+   * @param {string} data.author The name of the service provider.
+   * @param {string} data.title A title associated with the tag, such as the
+   *   name of the radio programme.
+   * @param {string} data.summary A brief description associated with the tag,
+   *   such as artist and song title, or more information about the radio
+   *   programme.
+   * @param {string} data.publishedDate The time of the tag.
+   */
+
+  /**
    * Retrieves the list of tags for the device or the user represented by the
    * access token.
    *
    * @param {string|URI} baseUrl The base URL of the RadioTAG service.
    * @param {string} accessToken The CPA access token which authenticates
    *   the request.
-   * @param done
+   * @param {getTagsCallback} done Callback function.
    */
 
   getTags: function(baseUrl, accessToken, done) {
@@ -148,11 +184,25 @@ var RadioTAG = {
   },
 
   /**
+   * Callback function for the {@link RadioTAG.getAuthProvider}
+   * function.
+   *
+   * @callback getAuthProviderCallback
+   * @param {Error|null} error On success, this value is <code>null</code>;
+   *   on error, it is an <code>Error</code> object containing an error message.
+   * @param {string|null} baseUrl On success, this value the base URL of the
+   *   authorization provider associated with this service provider.
+   * @param {array|null} modes On success, this value is an array of strings
+   *   indicating which authentication modes are available, either "client",
+   *   "user", or both.
+   */
+
+  /**
    * Discovers the CPA Auth Provider associated with the RadioTAG service, and
    * the available authentication modes.
    *
    * @param {string|URI} baseUrl The base URL of the RadioTAG service.
-   * @param done
+   * @param {getAuthProviderCallback} done Callback function.
    */
 
   getAuthProvider: function(baseUrl, done) {
