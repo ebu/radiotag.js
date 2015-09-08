@@ -12,7 +12,7 @@ module.exports = {
   },
 
   endpoints: {
-    spTagUrl: '/radiodns/tag/1/tag',
-    spListTagsUrl: '/radiodns/tag/1/tags'
+    tag: '/radiodns/tag/1/tag',
+    getTags: '/radiodns/tag/1/tags'
   }
 };

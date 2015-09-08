@@ -4,7 +4,7 @@
 var URI = require('URIjs');
 
 module.exports = {
-  getUri: function(domain, http) {
+  getUrl: function(domain, http) {
     return new URI({
       protocol: http ? 'http' : 'https',
       hostname: domain,

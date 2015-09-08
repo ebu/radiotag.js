@@ -9,7 +9,7 @@ var $          = require('cheerio'),
 /**
  * Parses the WWW-Authenticate header of the Service Provider response.
  *
- * @param challenge is the value of the WWW-Authenticate header.
+ * @param {string} challenge is the value of the WWW-Authenticate header.
  * @returns An object containing the Authorization Provider URI and the
  * available modes.
  *
@@ -66,35 +66,39 @@ var extractTags = function(xmlData) {
   return tags;
 };
 
-var uriWithPath = function(uri, path) {
-  return URI(uri).path(path).toString();
+var uriWithPath = function(baseUrl, path) {
+  return URI(baseUrl).path(path).toString();
 };
 
-var getTagUrl = function(uri) {
-  return uriWithPath(uri, definition.endpoints.spTagUrl);
+var getTagUrl = function(baseUrl) {
+  return uriWithPath(baseUrl, definition.endpoints.tag);
 };
 
-var getTagsUrl = function(uri) {
-  return uriWithPath(uri, definition.endpoints.spListTagsUrl);
+var getTagsUrl = function(baseUrl) {
+  return uriWithPath(baseUrl, definition.endpoints.getTags);
 };
 
-module.exports = {
+/** @namespace */
+
+var RadioTAG = {
 
   /**
    * Posts a tag to the RadioTAG service.
    *
-   * @param bearer Bearer URI for the radio service being tagged
-   * @param timeSource The system clock's source of time (either 'broadcast',
-   * 'user' or 'ntp')
-   * @param uri The URI of the RadioTAG service
-   * @param accessToken The CPA access token which authenticates the request
+   * @param {string|URI} baseUrl The base URL of the RadioTAG service.
+   * @param {string} bearer Bearer URI for the radio station being tagged.
+   * @param {string} timeSource The system clock's source of time
+   *   (either 'broadcast', 'user' or 'ntp').
+   * @param {Date} time The time of the tag.
+   * @param {string} accessToken The CPA access token which authenticates
+   *   the request.
    * @param done
    */
 
-  tag: function(bearer, timeSource, uri, accessToken, done) {
+  tag: function(baseUrl, bearer, timeSource, time, accessToken, done) {
     var data = {
       bearer: bearer,
-      time:   Math.floor(new Date().getTime() / 1000)
+      time:   Math.floor(time.getTime() / 1000)
     };
 
     if (timeSource) {
@@ -103,7 +107,7 @@ module.exports = {
       // jshint +W106
     }
 
-    var tagUrl = getTagUrl(uri);
+    var tagUrl = getTagUrl(baseUrl);
 
     req.postForm(tagUrl, data, accessToken)
       .then(
@@ -120,15 +124,16 @@ module.exports = {
 
   /**
    * Retrieves the list of tags for the device or the user represented by the
-   * access token
+   * access token.
    *
-   * @param uri The URI of the RadioTAG service
-   * @param accessToken The CPA access token which authenticates the request
+   * @param {string|URI} baseUrl The base URL of the RadioTAG service.
+   * @param {string} accessToken The CPA access token which authenticates
+   *   the request.
    * @param done
    */
 
-  listTags: function(uri, accessToken, done) {
-    var tagsUrl = getTagsUrl(uri);
+  getTags: function(baseUrl, accessToken, done) {
+    var tagsUrl = getTagsUrl(baseUrl);
 
     req.get(tagsUrl, accessToken)
       .then(
@@ -144,13 +149,13 @@ module.exports = {
 
   /**
    * Discovers the CPA Auth Provider associated with the RadioTAG service, and
-   * the available authentication modes
+   * the available authentication modes.
    *
-   * @param uri The URI of the RadioTAG service
+   * @param {string|URI} baseUrl The base URL of the RadioTAG service.
    * @param done
    */
 
-  getAuthProvider: function(uri, done) {
+  getAuthProvider: function(baseUrl, done) {
     var callback = function(response) {
       var challenge = response.headers['www-authenticate'];
 
@@ -163,9 +168,11 @@ module.exports = {
       done(null, authProvider.apBaseUrl, authProvider.modes);
     };
 
-    var tagUrl = getTagUrl(uri);
+    var tagUrl = getTagUrl(baseUrl);
 
     return req.postForm(tagUrl)
       .then(callback, callback);
   }
 };
+
+module.exports = RadioTAG;
