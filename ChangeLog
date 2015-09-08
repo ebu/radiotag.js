@@ -1,0 +1,22 @@
+v1.0.4, 4/9/2015
+
+  * Use URIjs module to construct URLs.
+
+  * Updated Gruntfile to fix 'watch' task, and add 'jsdoc' task.
+
+v1.0.3, 18/8/2015
+
+  * Updated service provider endpoints to RadioTAG protocol v1.0.0 (draft 6).
+
+    See https://github.com/andybee/radiotag-doc/tree/1c8693984eb05ff81a112bc236e569360b8139a0
+
+  * Use browserify to produce AMD-compatible build for use in browsers.
+
+  * Replaced QUnit with mocha test framework.
+
+v1.0.2, 3/8/2014
+
+  * Initial version. Corresponds with the Cross Platform Authentication
+    protocol v1.0, section 7.7.
+
+    See https://tech.ebu.ch/docs/tech/tech3366.pdf
