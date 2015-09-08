@@ -37,11 +37,19 @@ var parseWwwAuthenticate = function(challenge) {
 };
 
 /**
+ * @typedef TagInfo
+ * @type Object
+ * @property {string} author The name of the service provider.
+ * @property {string} title The title of the tag.
+ * @property {string} summary The summary description of the tag.
+ * @property {string} publishedDate The time of the tag.
+ */
+
+/**
  * Extracts the tags from the XML document.
  *
- * @param xmlData the source document.
- * @returns an array of tags containing the following fields:
- * author, title, summary, publishedDate.
+ * @param {document} xmlData the source document.
+ * @returns {Array.<TagInfo>} An array of tag information.
  *
  * @private
  */
@@ -88,16 +96,8 @@ var RadioTAG = {
    * @callback tagCallback
    * @param {Error|null} error On success, this value is <code>null</code>;
    *   on error, it is an <code>Error</code> object containing an error message.
-   * @param {Object|null} data On success, this value is an object containing
-   *   the information described below; on error, this value is
-   *   <code>null</code>
-   * @param {string} data.author The name of the service provider.
-   * @param {string} data.title A title associated with the tag, such as the
-   *   name of the radio programme.
-   * @param {string} data.summary A brief description associated with the tag,
-   *   such as artist and song title, or more information about the radio
-   *   programme.
-   * @param {string} data.publishedDate The time of the tag.
+   * @param {TagInfo|null} data On success, this value is an object containing
+   *   the information about the tag; on error, this value is <code>null</code>.
    */
 
   /**
@@ -146,16 +146,9 @@ var RadioTAG = {
    * @callback getTagsCallback
    * @param {Error|null} error On success, this value is <code>null</code>;
    *   on error, it is an <code>Error</code> object containing an error message.
-   * @param {Object|null} data On success, this value is an array of objects,
-   *   each containing the information described below; on error, this value is
-   *   <code>null</code>
-   * @param {string} data.author The name of the service provider.
-   * @param {string} data.title A title associated with the tag, such as the
-   *   name of the radio programme.
-   * @param {string} data.summary A brief description associated with the tag,
-   *   such as artist and song title, or more information about the radio
-   *   programme.
-   * @param {string} data.publishedDate The time of the tag.
+   * @param {Array.<TagInfo>|null} data On success, this value is an array of
+   *   objects, each containing tag information; on error, this value is
+   *   <code>null</code>.
    */
 
   /**
