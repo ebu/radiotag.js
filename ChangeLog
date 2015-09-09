@@ -1,3 +1,10 @@
+v1.2.0, 9/9/2015
+
+  * Renamed the tag 'publishedDate' field to 'published', and return as a
+    Date object.
+
+  * Added more JSDoc comments.
+
 v1.1.0, 8/9/2015
 
   * Renamed listTags function to getTags, and getUri to getUrl.
