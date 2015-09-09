@@ -13011,11 +13011,28 @@ var $          = _dereq_('cheerio'),
     URI        = _dereq_('URIjs');
 
 /**
+ * @typedef ModeInfo
+ * @type Object
+ * @property {boolean} client Indicates whether client mode is available.
+ * @property {boolean} user Indicates whether user mode is available.
+ * @property {boolean} anonymous Indicates whether anonymous mode is
+ *   available.
+ */
+
+/**
+ * @typedef AuthProviderInfo
+ * @type Object
+ * @property {string} baseUrl The base URL of the authorization provider.
+ * @property {ModeInfo} modes An object containing information on which
+ *   authentication modes are available.
+ */
+
+/**
  * Parses the WWW-Authenticate header of the Service Provider response.
  *
- * @param challenge is the value of the WWW-Authenticate header.
- * @returns An object containing the Authorization Provider URI and the
- * available modes.
+ * @param {string} challenge The value of the WWW-Authenticate header.
+ * @returns {AuthProviderInfo} An object containing the Authorization Provider
+ *   URI and the available authentication modes.
  *
  * @private
  */
@@ -13029,23 +13046,31 @@ var parseWwwAuthenticate = function(challenge) {
 
   var modesArray = data.modes.split(',');
   var modes = {
-    client:  (modesArray.indexOf('client') !== -1),
-    user:    (modesArray.indexOf('user') !== -1),
+    client:    (modesArray.indexOf('client') !== -1),
+    user:      (modesArray.indexOf('user') !== -1),
     anonymous: false
   };
 
   return {
-    apBaseUrl: data.uri+'/',
+    baseUrl: data.uri,
     modes: modes
   };
 };
 
 /**
+ * @typedef TagInfo
+ * @type Object
+ * @property {string} author The name of the service provider.
+ * @property {string} title The title of the tag.
+ * @property {string} summary The summary description of the tag.
+ * @property {Date} published The time of the tag.
+ */
+
+/**
  * Extracts the tags from the XML document.
  *
- * @param xmlData the source document.
- * @returns an array of tags containing the following fields:
- * author, title, summary, publishedDate.
+ * @param {document} xmlData the source document.
+ * @returns {Array.<TagInfo>} An array of tag information.
  *
  * @private
  */
@@ -13057,11 +13082,13 @@ var extractTags = function(xmlData) {
   var entries = doc.find('entry');
 
   for (var i = 0; i < entries.length; i++) {
+    var date = $(entries[i]).find('published').first().text();
+
     var tag = {
       author: author,
       title: $(entries[i]).find('title').first().text(),
       summary: $(entries[i]).find('summary').first().text(),
-      publishedDate: $(entries[i]).find('published').first().text()
+      published: new Date(date)
     };
 
     tags.push(tag);
@@ -13082,19 +13109,31 @@ var getTagsUrl = function(baseUrl) {
   return uriWithPath(baseUrl, definition.endpoints.getTags);
 };
 
-module.exports = {
+/** @namespace */
+
+var RadioTAG = {
+
+  /**
+   * Callback function for the {@link RadioTAG.tag} function.
+   *
+   * @callback tagCallback
+   * @param {Error|null} error On success, this value is <code>null</code>;
+   *   on error, it is an <code>Error</code> object containing an error message.
+   * @param {TagInfo|null} data On success, this value is an object containing
+   *   the information about the tag; on error, this value is <code>null</code>.
+   */
 
   /**
    * Posts a tag to the RadioTAG service.
    *
-   * @param {string} baseUrl The base URL of the RadioTAG service
-   * @param {string} bearer Bearer URI for the radio station being tagged
+   * @param {string|URI} baseUrl The base URL of the RadioTAG service.
+   * @param {string} bearer Bearer URI for the radio station being tagged.
    * @param {string} timeSource The system clock's source of time
-   *   (either 'broadcast', 'user' or 'ntp')
-   * @param {Date} time The time of the tag
+   *   (either 'broadcast', 'user' or 'ntp').
+   * @param {Date} time The time of the tag.
    * @param {string} accessToken The CPA access token which authenticates
-   *   the request
-   * @param done
+   *   the request.
+   * @param {tagCallback} done Callback function.
    */
 
   tag: function(baseUrl, bearer, timeSource, time, accessToken, done) {
@@ -13125,13 +13164,24 @@ module.exports = {
   },
 
   /**
-   * Retrieves the list of tags for the device or the user represented by the
-   * access token
+   * Callback function for the {@link RadioTAG.getTags} function.
    *
-   * @param {string} baseUrl The base URL of the RadioTAG service
+   * @callback getTagsCallback
+   * @param {Error|null} error On success, this value is <code>null</code>;
+   *   on error, it is an <code>Error</code> object containing an error message.
+   * @param {Array.<TagInfo>|null} data On success, this value is an array of
+   *   objects, each containing tag information; on error, this value is
+   *   <code>null</code>.
+   */
+
+  /**
+   * Retrieves the list of tags for the device or the user represented by the
+   * access token.
+   *
+   * @param {string|URI} baseUrl The base URL of the RadioTAG service.
    * @param {string} accessToken The CPA access token which authenticates
-   *   the request
-   * @param done
+   *   the request.
+   * @param {getTagsCallback} done Callback function.
    */
 
   getTags: function(baseUrl, accessToken, done) {
@@ -13150,11 +13200,24 @@ module.exports = {
   },
 
   /**
-   * Discovers the CPA Auth Provider associated with the RadioTAG service, and
-   * the available authentication modes
+   * Callback function for the {@link RadioTAG.getAuthProvider}
+   * function.
    *
-   * @param baseUrl The base URL of the RadioTAG service
-   * @param done
+   * @callback getAuthProviderCallback
+   * @param {Error|null} error On success, this value is <code>null</code>;
+   *   on error, it is an <code>Error</code> object containing an error message.
+   * @param {string|null} baseUrl On success, this value the base URL of the
+   *   authorization provider associated with this service provider.
+   * @param {ModeInfo|null} modes On success, an object indicating which
+   *   authentication modes are available.
+   */
+
+  /**
+   * Discovers the CPA Auth Provider associated with the RadioTAG service, and
+   * the available authentication modes.
+   *
+   * @param {string|URI} baseUrl The base URL of the RadioTAG service.
+   * @param {getAuthProviderCallback} done Callback function.
    */
 
   getAuthProvider: function(baseUrl, done) {
@@ -13167,7 +13230,7 @@ module.exports = {
       }
 
       var authProvider = parseWwwAuthenticate(challenge);
-      done(null, authProvider.apBaseUrl, authProvider.modes);
+      done(null, authProvider.baseUrl, authProvider.modes);
     };
 
     var tagUrl = getTagUrl(baseUrl);
@@ -13176,6 +13239,8 @@ module.exports = {
       .then(callback, callback);
   }
 };
+
+module.exports = RadioTAG;
 
 },{"../utils/req":23,"./definition":19,"URIjs":3,"cheerio":16}],21:[function(_dereq_,module,exports){
 /*global require, module*/

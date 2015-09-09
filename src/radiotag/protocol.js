@@ -7,11 +7,28 @@ var $          = require('cheerio'),
     URI        = require('URIjs');
 
 /**
+ * @typedef ModeInfo
+ * @type Object
+ * @property {boolean} client Indicates whether client mode is available.
+ * @property {boolean} user Indicates whether user mode is available.
+ * @property {boolean} anonymous Indicates whether anonymous mode is
+ *   available.
+ */
+
+/**
+ * @typedef AuthProviderInfo
+ * @type Object
+ * @property {string} baseUrl The base URL of the authorization provider.
+ * @property {ModeInfo} modes An object containing information on which
+ *   authentication modes are available.
+ */
+
+/**
  * Parses the WWW-Authenticate header of the Service Provider response.
  *
- * @param {string} challenge is the value of the WWW-Authenticate header.
- * @returns An object containing the Authorization Provider URI and the
- * available modes.
+ * @param {string} challenge The value of the WWW-Authenticate header.
+ * @returns {AuthProviderInfo} An object containing the Authorization Provider
+ *   URI and the available authentication modes.
  *
  * @private
  */
@@ -25,13 +42,13 @@ var parseWwwAuthenticate = function(challenge) {
 
   var modesArray = data.modes.split(',');
   var modes = {
-    client:  (modesArray.indexOf('client') !== -1),
-    user:    (modesArray.indexOf('user') !== -1),
+    client:    (modesArray.indexOf('client') !== -1),
+    user:      (modesArray.indexOf('user') !== -1),
     anonymous: false
   };
 
   return {
-    apBaseUrl: data.uri+'/',
+    baseUrl: data.uri,
     modes: modes
   };
 };
@@ -42,7 +59,7 @@ var parseWwwAuthenticate = function(challenge) {
  * @property {string} author The name of the service provider.
  * @property {string} title The title of the tag.
  * @property {string} summary The summary description of the tag.
- * @property {string} publishedDate The time of the tag.
+ * @property {Date} published The time of the tag.
  */
 
 /**
@@ -61,11 +78,13 @@ var extractTags = function(xmlData) {
   var entries = doc.find('entry');
 
   for (var i = 0; i < entries.length; i++) {
+    var date = $(entries[i]).find('published').first().text();
+
     var tag = {
       author: author,
       title: $(entries[i]).find('title').first().text(),
       summary: $(entries[i]).find('summary').first().text(),
-      publishedDate: $(entries[i]).find('published').first().text()
+      published: new Date(date)
     };
 
     tags.push(tag);
@@ -185,9 +204,8 @@ var RadioTAG = {
    *   on error, it is an <code>Error</code> object containing an error message.
    * @param {string|null} baseUrl On success, this value the base URL of the
    *   authorization provider associated with this service provider.
-   * @param {array|null} modes On success, this value is an array of strings
-   *   indicating which authentication modes are available, either "client",
-   *   "user", or both.
+   * @param {ModeInfo|null} modes On success, an object indicating which
+   *   authentication modes are available.
    */
 
   /**
@@ -208,7 +226,7 @@ var RadioTAG = {
       }
 
       var authProvider = parseWwwAuthenticate(challenge);
-      done(null, authProvider.apBaseUrl, authProvider.modes);
+      done(null, authProvider.baseUrl, authProvider.modes);
     };
 
     var tagUrl = getTagUrl(baseUrl);
