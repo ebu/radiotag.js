@@ -66,6 +66,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-jsdoc');
 
-  grunt.registerTask('test', ['jshint', 'mocha']);
-  grunt.registerTask('default', ['browserify', 'jshint', 'uglify']);
+  grunt.registerTask('build', ['jshint', 'browserify', 'uglify']);
+  grunt.registerTask('test', ['build', 'mocha']);
+  grunt.registerTask('default', ['test']);
 };
